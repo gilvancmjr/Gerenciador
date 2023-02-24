@@ -30,7 +30,7 @@ public class PessoaController {
 
 	@Autowired
 	private PessoaAssembler pessoaAssembler;
-	
+
 	@Autowired
 	private PessoaFormDisassembler pessoaFormDisassembler;
 
@@ -51,7 +51,6 @@ public class PessoaController {
 
 	@PostMapping
 	public ResponseEntity<PessoaDto> criarPessoa(@RequestBody PessoaForm pessoa) {
-		System.out.println("Pessoa: "+pessoa);
 		Pessoa pessoaAtual = pessoaFormDisassembler.toDomainObject(pessoa);
 		Pessoa novaPessoa = pessoaService.criarPessoa(pessoaAtual);
 		PessoaDto pessoaDto = pessoaAssembler.toModel(novaPessoa);
@@ -59,15 +58,17 @@ public class PessoaController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<PessoaDto> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
-		Pessoa pessoaExistente = pessoaService.getPessoa(id);
-		if (pessoaExistente != null) {
-			Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(id, pessoa);
-			PessoaDto pessoaDto = pessoaAssembler.toModel(pessoaAtualizada);
-			return ResponseEntity.ok(pessoaDto);
-		} else {
-			return ResponseEntity.notFound().build();
+	public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+		// Pessoa pessoaAtual = pessoaService.buscarOuFalhar(id);
+
+		// pessoaFormDisassembler.copyToDomainObject(pessoa, pessoaAtual);
+		// pessoaAtual = pessoaService.atualizarPessoa(id, pessoaAtual);
+		// return ResponseEntity.ok(pessoaAssembler.toModel(pessoaAtual));
+		Pessoa pessoaAtualizadaSalva = pessoaService.atualizarPessoa(id,pessoa);
+		if (pessoaAtualizadaSalva != null) {
+			return ResponseEntity.ok(pessoaAtualizadaSalva);
 		}
+		return ResponseEntity.notFound().build();
 	}
 
 	@DeleteMapping("/{id}")

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PessoaForm {
-	
+	private Long id;
 	private String nome;
 	@JsonFormat(pattern="dd/MM/yyyy") 
 	private LocalDate dataDeNascimento;

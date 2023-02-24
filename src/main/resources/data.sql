@@ -2,7 +2,7 @@
 INSERT INTO pessoa(nome, data_de_nascimento) 
 VALUES 
   ('Maria', DATE '1995-10-10'),
-  ('João', DATE '1988-05-20'),
+  ('Joao', DATE '1988-05-20'),
   ('Ana', DATE '2001-12-01');
 
 -- Inserir endereços para as pessoas

@@ -30,36 +30,35 @@ public class Pessoa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "nome")
 	private String nome;
-	
-	@JsonFormat(pattern="dd/MM/yyyy") 
+
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "data_de_nascimento")
 	private LocalDate dataDeNascimento;
-	
-	@OneToMany(cascade = CascadeType.ALL)// fetch = FetchType.LAZY)
-	@JoinColumn(name = "pessoa_id")
+
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
 	private List<Endereco> enderecos;
 
-	@OneToOne(cascade = CascadeType.ALL)//, fetch = FetchType.LAZY)
-	@JoinColumn(name = "endereco_principal_id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "endereco_principal_id", referencedColumnName = "id")
 	private Endereco enderecoPrincipal;
 
-//	public void adicionarEndereco(Endereco endereco) {
-//		this.enderecos.add(endereco);
-//	}
-//
-//	public void removerEndereco(Endereco endereco) {
-//		this.enderecos.remove(endereco);
-//	}
-//
-//	public Endereco getEnderecoPrincipal() {
-//		return enderecoPrincipal;
-//	}
-//
-//	public void setEnderecoPrincipal(Endereco enderecoPrincipal) {
-//		this.enderecoPrincipal = enderecoPrincipal;
-//	}
+	// public void adicionarEndereco(Endereco endereco) {
+	// this.enderecos.add(endereco);
+	// }
+	//
+	// public void removerEndereco(Endereco endereco) {
+	// this.enderecos.remove(endereco);
+	// }
+	//
+	// public Endereco getEnderecoPrincipal() {
+	// return enderecoPrincipal;
+	// }
+	//
+	// public void setEnderecoPrincipal(Endereco enderecoPrincipal) {
+	// this.enderecoPrincipal = enderecoPrincipal;
+	// }
 
 }

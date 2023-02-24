@@ -1,10 +1,15 @@
 package com.monteiro.gerenciador.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.monteiro.gerenciador.domain.exception.EntidadeNaoEncontradaException;
 import com.monteiro.gerenciador.domain.exception.PessoaNaoEncontradoException;
 import com.monteiro.gerenciador.domain.model.Endereco;
 import com.monteiro.gerenciador.domain.model.Pessoa;
@@ -39,12 +44,6 @@ public class PessoaService {
 		pessoaRepository.save(pessoa);
 	}
 
-//	public void adicionarEndereco(Long pessoaId, Endereco endereco) {
-//		Pessoa pessoa = pessoaRepository.findById(pessoaId).get();
-//		pessoa.adicionarEndereco(endereco);
-//		pessoaRepository.save(pessoa);
-//	}
-
 	public void definirEnderecoPrincipal(Long pessoaId, Endereco endereco) {
 		Pessoa pessoa = pessoaRepository.findById(pessoaId).get();
 		pessoa.setEnderecoPrincipal(endereco);
@@ -55,23 +54,50 @@ public class PessoaService {
 		return buscarOuFalhar(id);
 	}
 
+	@Transactional
 	public Pessoa criarPessoa(Pessoa pessoa) {
-
-		Pessoa result = pessoaRepository.save(pessoa);
-
-		return result;
-
-	}
-
-	public Pessoa atualizarPessoa(Long id, Pessoa pessoa) {
-		Pessoa pessoaExistente = buscarOuFalhar(id);
-		if (pessoaExistente != null) {
-			pessoa.setId(id);
-			return pessoaRepository.save(pessoa);
-		} else {
-			return null;
+		Pessoa novaPessoa = pessoaRepository.save(pessoa);
+		for (Endereco endereco : novaPessoa.getEnderecos()) {
+			endereco.setPessoa(novaPessoa);
 		}
+		enderecoRepository.saveAll(novaPessoa.getEnderecos());
+		if (novaPessoa.getEnderecoPrincipal() != null) {
+			novaPessoa.getEnderecoPrincipal().setPessoa(novaPessoa);
+			enderecoRepository.save(novaPessoa.getEnderecoPrincipal());
+		}
+		return novaPessoa;
 	}
+
+	public Pessoa atualizarPessoa(Long id, Pessoa pessoaAtualizada) {
+        Pessoa pessoaExistente = pessoaRepository.findById(id)
+            .orElseThrow(() -> new EntidadeNaoEncontradaException("Pessoa não encontrada com id: " + pessoaAtualizada.getId()));
+
+        pessoaExistente.setNome(pessoaAtualizada.getNome());
+        pessoaExistente.setDataDeNascimento(pessoaAtualizada.getDataDeNascimento());
+
+        // Atualiza os endereços existentes
+        for (Endereco endereco : pessoaAtualizada.getEnderecos()) {
+            Endereco enderecoExistente = enderecoRepository.findById(endereco.getId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Endereço não encontrado com id: " + endereco.getId()));
+
+            enderecoExistente.setLogradouro(endereco.getLogradouro());
+            enderecoExistente.setCep(endereco.getCep());
+            enderecoExistente.setNumero(endereco.getNumero());
+            enderecoExistente.setCidade(endereco.getCidade());
+        }
+
+        // Atualiza o endereço principal existente
+        Endereco enderecoPrincipal = pessoaAtualizada.getEnderecoPrincipal();
+        if (enderecoPrincipal != null) {
+            Endereco enderecoPrincipalExistente = enderecoRepository.findById(enderecoPrincipal.getId())
+                .orElseThrow(() -> new EntidadeNaoEncontradaException("Endereço não encontrado com id: " + enderecoPrincipal.getId()));
+
+            pessoaExistente.setEnderecoPrincipal(enderecoPrincipalExistente);
+        }
+
+        return pessoaRepository.save(pessoaExistente);
+    }
+
 
 	public void deletarPessoa(Long id) {
 		pessoaRepository.deleteById(id);
