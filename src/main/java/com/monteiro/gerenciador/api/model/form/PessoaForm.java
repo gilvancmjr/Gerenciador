@@ -1,6 +1,9 @@
 package com.monteiro.gerenciador.api.model.form;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,8 +13,9 @@ import lombok.Setter;
 public class PessoaForm {
 	
 	private String nome;
+	@JsonFormat(pattern="dd/MM/yyyy") 
 	private LocalDate dataDeNascimento;
-	private EnderecoIdForm enderecos;
-	private EnderecoIdForm enderecoPrincipal;
+	private List<EnderecoForm> enderecos;
+	private EnderecoForm enderecoPrincipal;
 
 }

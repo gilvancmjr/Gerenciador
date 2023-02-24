@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,28 +38,28 @@ public class Pessoa {
 	@Column(name = "data_de_nascimento")
 	private LocalDate dataDeNascimento;
 	
-	@OneToMany//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL)// fetch = FetchType.LAZY)
 	@JoinColumn(name = "pessoa_id")
 	private List<Endereco> enderecos;
 
-	@OneToOne//(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL)//, fetch = FetchType.LAZY)
 	@JoinColumn(name = "endereco_principal_id")
 	private Endereco enderecoPrincipal;
 
-	public void adicionarEndereco(Endereco endereco) {
-		this.enderecos.add(endereco);
-	}
-
-	public void removerEndereco(Endereco endereco) {
-		this.enderecos.remove(endereco);
-	}
-
-	public Endereco getEnderecoPrincipal() {
-		return enderecoPrincipal;
-	}
-
-	public void setEnderecoPrincipal(Endereco enderecoPrincipal) {
-		this.enderecoPrincipal = enderecoPrincipal;
-	}
+//	public void adicionarEndereco(Endereco endereco) {
+//		this.enderecos.add(endereco);
+//	}
+//
+//	public void removerEndereco(Endereco endereco) {
+//		this.enderecos.remove(endereco);
+//	}
+//
+//	public Endereco getEnderecoPrincipal() {
+//		return enderecoPrincipal;
+//	}
+//
+//	public void setEnderecoPrincipal(Endereco enderecoPrincipal) {
+//		this.enderecoPrincipal = enderecoPrincipal;
+//	}
 
 }

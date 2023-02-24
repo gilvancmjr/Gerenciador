@@ -26,11 +26,12 @@ public class Endereco {
 	private String logradouro;
 	
 	@Column(name = "cep")
-	private int cep;
+	private String cep;
 	
 	@Column(name = "numero")
 	private int numero;
 	
 	@Column(name = "cidade")
 	private String cidade;
+	
 }

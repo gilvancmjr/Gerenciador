@@ -1,13 +1,12 @@
-package com.monteiro.gerenciador.api.model;
+package com.monteiro.gerenciador.api.model.form;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class EnderecoDto {
-
-	private Long id;
+public class EnderecoForm {
+	
 	private String logradouro;
 	private String cep;
 	private int numero;

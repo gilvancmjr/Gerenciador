@@ -51,6 +51,7 @@ public class PessoaController {
 
 	@PostMapping
 	public ResponseEntity<PessoaDto> criarPessoa(@RequestBody PessoaForm pessoa) {
+		System.out.println("Pessoa: "+pessoa);
 		Pessoa pessoaAtual = pessoaFormDisassembler.toDomainObject(pessoa);
 		Pessoa novaPessoa = pessoaService.criarPessoa(pessoaAtual);
 		PessoaDto pessoaDto = pessoaAssembler.toModel(novaPessoa);
