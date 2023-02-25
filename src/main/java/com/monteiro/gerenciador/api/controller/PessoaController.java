@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,58 +26,38 @@ public class PessoaController {
 
 	@Autowired
 	private PessoaService pessoaService;
-
+	
 	@Autowired
 	private PessoaAssembler pessoaAssembler;
 
 	@Autowired
 	private PessoaFormDisassembler pessoaFormDisassembler;
 
-	@GetMapping
-	public ResponseEntity<List<PessoaDto>> listar() {
-		List<Pessoa> pessoas = pessoaService.getListPessoas();
-		List<PessoaDto> pessoaDtos = pessoaAssembler.toCollectionModel(pessoas);
-		return ResponseEntity.ok(pessoaDtos);
-
-	}
-
-	@GetMapping("/{pessoaId}")
-	public ResponseEntity<PessoaDto> getPessoa(@PathVariable Long pessoaId) {
-		Pessoa pessoa = pessoaService.buscarOuFalhar(pessoaId);
-		PessoaDto pessoaDto = pessoaAssembler.toModel(pessoa);
-		return ResponseEntity.ok(pessoaDto);
-	}
-
 	@PostMapping
-	public ResponseEntity<PessoaDto> criarPessoa(@RequestBody PessoaForm pessoa) {
-		Pessoa pessoaAtual = pessoaFormDisassembler.toDomainObject(pessoa);
-		Pessoa novaPessoa = pessoaService.criarPessoa(pessoaAtual);
-		PessoaDto pessoaDto = pessoaAssembler.toModel(novaPessoa);
-		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaDto);
+	public ResponseEntity<Pessoa> criarPessoa(@RequestBody PessoaForm pessoaForm) {
+		Pessoa pessoa = pessoaFormDisassembler.toDomainObject(pessoaForm);
+		Pessoa pessoaCriada = pessoaService.criarPessoa(pessoa);
+		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaCriada);
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
-		// Pessoa pessoaAtual = pessoaService.buscarOuFalhar(id);
-
-		// pessoaFormDisassembler.copyToDomainObject(pessoa, pessoaAtual);
-		// pessoaAtual = pessoaService.atualizarPessoa(id, pessoaAtual);
-		// return ResponseEntity.ok(pessoaAssembler.toModel(pessoaAtual));
-		Pessoa pessoaAtualizadaSalva = pessoaService.atualizarPessoa(id,pessoa);
-		if (pessoaAtualizadaSalva != null) {
-			return ResponseEntity.ok(pessoaAtualizadaSalva);
-		}
-		return ResponseEntity.notFound().build();
+		Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(id, pessoa);
+		return ResponseEntity.ok(pessoaAtualizada);
 	}
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deletarPessoa(@PathVariable Long id) {
-		Pessoa pessoaExistente = pessoaService.getPessoa(id);
-		if (pessoaExistente != null) {
-			pessoaService.deletarPessoa(id);
-			return ResponseEntity.noContent().build();
-		} else {
-			return ResponseEntity.notFound().build();
-		}
+	@GetMapping("/{id}")
+	public ResponseEntity<PessoaDto> buscarPessoa(@PathVariable Long id) {
+		Pessoa pessoa = pessoaService.buscarPessoa(id);
+		PessoaDto pessoaDto = pessoaAssembler.toModel(pessoa);
+		return ResponseEntity.ok(pessoaDto);
+	}
+
+	@GetMapping
+	public ResponseEntity<List<PessoaDto>> listar() {
+		List<Pessoa> pessoas = pessoaService.listarPessoas();
+		List<PessoaDto> pessoaDtos = pessoaAssembler.toCollectionModel(pessoas);
+		return ResponseEntity.ok(pessoaDtos);
+
 	}
 }

@@ -12,5 +12,7 @@ public class EnderecoDto {
 	private String cep;
 	private int numero;
 	private String cidade;
+	private boolean principal;
+	
 
 }

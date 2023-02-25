@@ -11,5 +11,6 @@ public class EnderecoForm {
 	private String cep;
 	private int numero;
 	private String cidade;
+	
 
 }

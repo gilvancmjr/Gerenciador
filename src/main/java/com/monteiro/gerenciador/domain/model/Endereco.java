@@ -1,6 +1,5 @@
 package com.monteiro.gerenciador.domain.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,31 +12,23 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Endereco {
 
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name = "logradouro")
 	private String logradouro;
-	
-	@Column(name = "cep")
 	private String cep;
-	
-	@Column(name = "numero")
-	private int numero;
-	
-	@Column(name = "cidade")
+	private String numero;
 	private String cidade;
-
 	@ManyToOne
-    @JoinColumn(name = "pessoa_id")
-    private Pessoa pessoa;
-	
+	@JoinColumn(name = "pessoa_id")
+	private Pessoa pessoa;
+	private boolean principal;
+
 }

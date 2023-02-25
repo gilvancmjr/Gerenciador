@@ -8,8 +8,6 @@ import com.monteiro.gerenciador.domain.model.Pessoa;
 @Repository
 public interface PessoaRepository  extends JpaRepository<Pessoa, Long>{
 	
-//	@Query("from Pessoa")
-//	List<Pessoa> findByEnderecosId(Long id);
 
     
 }
