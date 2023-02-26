@@ -9,7 +9,7 @@ public class PessoaNaoEncontradoException extends EntidadeNaoEncontradaException
     }
 
     public PessoaNaoEncontradoException(Long pessoaId) {
-        this(String.format("Não existe um cadastro de endereço com código %d", pessoaId));
+        this(String.format("Não existe um cadastro de pessoa com código %d", pessoaId));
     }
 
 }

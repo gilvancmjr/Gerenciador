@@ -26,9 +26,11 @@ public class Endereco {
 	private String cep;
 	private String numero;
 	private String cidade;
+	private boolean principal;
 	@ManyToOne
 	@JoinColumn(name = "pessoa_id")
 	private Pessoa pessoa;
-	private boolean principal;
+	
+	
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.monteiro.gerenciador.domain.exception.PessoaNaoEncontradoException;
 import com.monteiro.gerenciador.domain.model.Endereco;
 import com.monteiro.gerenciador.domain.model.Pessoa;
 import com.monteiro.gerenciador.domain.repository.EnderecoRepository;
@@ -14,23 +15,33 @@ public class EnderecoService {
 
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-	
+
+	@Autowired
+	private PessoaService pessoaService;
+
 	public Endereco criarEndereco(Long pessoaId, Endereco endereco) {
-		Pessoa pessoa = new Pessoa();
-		pessoa.setId(pessoaId);
+		Pessoa pessoa = pessoaService.buscarPessoa(pessoaId);		
 		endereco.setPessoa(pessoa);
 		return enderecoRepository.save(endereco);
 	}
 
 	public List<Endereco> listarEnderecos(Long pessoaId) {
-		return enderecoRepository.findByPessoaId(pessoaId);
+		return buscarOuFalar(pessoaId);
 	}
 
 	public void definirEnderecoPrincipal(Long pessoaId, Long enderecoId) {
-		List<Endereco> enderecos = enderecoRepository.findByPessoaId(pessoaId);
+		List<Endereco> enderecos = buscarOuFalar(pessoaId);
 		enderecos.forEach(endereco -> {
 			endereco.setPrincipal(endereco.getId().equals(enderecoId));
 			enderecoRepository.save(endereco);
 		});
+	}
+
+	private List<Endereco> buscarOuFalar(Long pessoaId) {
+		List<Endereco> enderecos = enderecoRepository.findByPessoaId(pessoaId);
+		if (enderecos == null || enderecos.isEmpty()) {
+			throw new PessoaNaoEncontradoException(pessoaId);
+		}
+		return enderecos;
 	}
 }
