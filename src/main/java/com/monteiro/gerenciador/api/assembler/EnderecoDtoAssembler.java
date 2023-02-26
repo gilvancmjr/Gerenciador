@@ -11,7 +11,7 @@ import com.monteiro.gerenciador.api.model.EnderecoDto;
 import com.monteiro.gerenciador.domain.model.Endereco;
 
 @Component
-public class EnderecoAssembler {
+public class EnderecoDtoAssembler {
 
 	@Autowired
 	private ModelMapper modelMapper;

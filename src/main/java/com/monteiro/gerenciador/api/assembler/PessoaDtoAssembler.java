@@ -11,7 +11,7 @@ import com.monteiro.gerenciador.api.model.PessoaDto;
 import com.monteiro.gerenciador.domain.model.Pessoa;
 
 @Component
-public class PessoaAssembler {
+public class PessoaDtoAssembler {
 
 	@Autowired
 	private ModelMapper modelMapper;

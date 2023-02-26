@@ -13,10 +13,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.monteiro.gerenciador.api.assembler.EnderecoAssembler;
+import com.monteiro.gerenciador.api.assembler.EnderecoDtoAssembler;
+import com.monteiro.gerenciador.api.assembler.EnderecoFormDisassembler;
 import com.monteiro.gerenciador.api.model.EnderecoDto;
+import com.monteiro.gerenciador.api.model.form.EnderecoForm;
 import com.monteiro.gerenciador.domain.model.Endereco;
 import com.monteiro.gerenciador.domain.service.EnderecoService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/pessoas/{pessoaId}/enderecos")
@@ -25,10 +29,13 @@ public class EnderecoController {
     @Autowired
     private EnderecoService enderecoService;
     @Autowired
-    private EnderecoAssembler enderecoAssembler;
+    private EnderecoDtoAssembler enderecoAssembler;
+    @Autowired
+    private EnderecoFormDisassembler enderecoFormDisassembler;
 
     @PostMapping
-    public ResponseEntity<EnderecoDto> criarEndereco(@PathVariable Long pessoaId, @RequestBody Endereco endereco) {
+    public ResponseEntity<EnderecoDto> criarEndereco(@PathVariable Long pessoaId, @RequestBody @Valid EnderecoForm enderecoForm) {
+    	Endereco  endereco = enderecoFormDisassembler.toDomainObject(enderecoForm);
         Endereco enderecoCriado = enderecoService.criarEndereco(pessoaId, endereco);
         EnderecoDto enderecoDto = enderecoAssembler.toModel(enderecoCriado);
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoDto);

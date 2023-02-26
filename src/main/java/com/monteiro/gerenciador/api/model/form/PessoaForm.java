@@ -2,12 +2,10 @@ package com.monteiro.gerenciador.api.model.form;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
