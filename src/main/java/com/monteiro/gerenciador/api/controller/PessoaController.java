@@ -2,6 +2,8 @@ package com.monteiro.gerenciador.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import com.monteiro.gerenciador.api.model.form.PessoaForm;
 import com.monteiro.gerenciador.domain.model.Pessoa;
 import com.monteiro.gerenciador.domain.service.PessoaService;
 
+
 @RestController
 @RequestMapping("/pessoas")
 public class PessoaController {
@@ -34,16 +37,18 @@ public class PessoaController {
 	private PessoaFormDisassembler pessoaFormDisassembler;
 
 	@PostMapping
-	public ResponseEntity<Pessoa> criarPessoa(@RequestBody PessoaForm pessoaForm) {
+	public ResponseEntity<PessoaDto> criarPessoa(@RequestBody @Valid PessoaForm pessoaForm) {
 		Pessoa pessoa = pessoaFormDisassembler.toDomainObject(pessoaForm);
 		Pessoa pessoaCriada = pessoaService.criarPessoa(pessoa);
-		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaCriada);
+		PessoaDto pessoaDto = pessoaAssembler.toModel(pessoaCriada);
+		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaDto);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Pessoa> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
+	public ResponseEntity<PessoaDto> atualizarPessoa(@PathVariable Long id, @RequestBody Pessoa pessoa) {
 		Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(id, pessoa);
-		return ResponseEntity.ok(pessoaAtualizada);
+		PessoaDto pessoaDto = pessoaAssembler.toModel(pessoaAtualizada);
+		return ResponseEntity.ok(pessoaDto);
 	}
 
 	@GetMapping("/{id}")
