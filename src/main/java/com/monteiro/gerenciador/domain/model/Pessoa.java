@@ -27,28 +27,11 @@ public class Pessoa {
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	private Long id;
 	private String nome;
-	@JsonFormat(pattern="dd/MM/yyyy") 
-    private LocalDate dataNascimento;
-    @OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
-    private List<Endereco> enderecos = new ArrayList<>();
-
-
-	// public void adicionarEndereco(Endereco endereco) {
-	// this.enderecos.add(endereco);
-	// }
-	//
-	// public void removerEndereco(Endereco endereco) {
-	// this.enderecos.remove(endereco);
-	// }
-	//
-	// public Endereco getEnderecoPrincipal() {
-	// return enderecoPrincipal;
-	// }
-	//
-	// public void setEnderecoPrincipal(Endereco enderecoPrincipal) {
-	// this.enderecoPrincipal = enderecoPrincipal;
-	// }
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	private LocalDate dataNascimento;
+	@OneToMany(mappedBy = "pessoa", cascade = CascadeType.ALL)
+	private List<Endereco> enderecos = new ArrayList<>();
 
 }
