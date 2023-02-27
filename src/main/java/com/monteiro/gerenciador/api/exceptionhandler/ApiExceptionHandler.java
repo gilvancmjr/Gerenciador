@@ -11,7 +11,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.Nullable;
@@ -40,7 +39,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		HttpStatus httpStatus = convertHttpStatusCodeToHttpStatus(status.value());
 		return handleValidationInterno(ex, headers, httpStatus, request, ex.getBindingResult());
 	}
@@ -70,7 +69,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
-			HttpStatusCode status, WebRequest request) {
+			HttpStatus status, WebRequest request) {
 		if (ex instanceof MethodArgumentTypeMismatchException) {
 			return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
 		}
@@ -79,7 +78,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
-			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		HttpStatus httpStatus = convertHttpStatusCodeToHttpStatus(status.value());
 		ProblemType problemType = ProblemType.PARAMETRO_INVALIDO;
@@ -98,7 +97,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		Throwable rootCausa = ExceptionUtils.getRootCause(ex);
 
@@ -120,7 +119,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handlePropertyBinding(PropertyBindingException ex, HttpHeaders headers,
-			HttpStatusCode status, WebRequest request) {
+			HttpStatus status, WebRequest request) {
 
 		HttpStatus httpStatus = convertHttpStatusCodeToHttpStatus(status.value());
 		String path = joinPath(ex.getPath());
@@ -136,7 +135,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException ex, HttpHeaders headers,
-			HttpStatusCode status, WebRequest request) {
+			HttpStatus status, WebRequest request) {
 
 		HttpStatus httpStatus = convertHttpStatusCodeToHttpStatus(status.value());
 		String path = joinPath(ex.getPath());
@@ -177,7 +176,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception ex, @Nullable Object body, HttpHeaders headers,
-			HttpStatusCode statusCode, WebRequest request) {
+			HttpStatus statusCode, WebRequest request) {
 		HttpStatus status = convertHttpStatusCodeToHttpStatus(statusCode.value());
 
 		if (body == null) {

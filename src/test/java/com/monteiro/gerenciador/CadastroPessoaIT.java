@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,24 +16,21 @@ import io.restassured.http.ContentType;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class CadastroPessoaIT {
+public class CadastroPessoaIT {
 
-	
-	private static final int PESSOA_ID_INEXISTENTE = 100;
-	private static final int PESSOA_ID_ATUALIZAR = 2;
-	private static final int PESSOA_ID = 1;
 	
 	private static final String DADOS_INVALIDOS_PROBLEM_TITLE = "Dados inválidos";
 	private static final String RECURSO_NAO_ENCONTRADO = "Recurso não encontrada";
+	
+	private int pessoaId = 1; 
+	private int pessoaIdInexistente = 100; 
+	private int pessoaIdAtualizar = 2;
 	
 	@LocalServerPort
 	private int port;
 	private String jsonCorretoPessoa;
 	private String jsonIncorretoPessoa;
 
-	
-
-	
 	@BeforeEach
 	public void setUp() {
 		RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
@@ -57,7 +54,7 @@ class CadastroPessoaIT {
 	@Test
 	public void deveRetornarStatus200eNomePessoa_QuandoConsultarPessoa() {
 		RestAssured.given()
-			.pathParam("pessoaId", PESSOA_ID)
+			.pathParam("pessoaId", pessoaId)
 			.accept(ContentType.JSON)
 		.when()
 			.get("/{pessoaId}")
@@ -82,7 +79,7 @@ class CadastroPessoaIT {
 	@Test
 	public void deveRetornarStatus200_QuandoAtualizarPessoa() {
 		RestAssured.given()
-			.pathParam("pessoaId", PESSOA_ID_ATUALIZAR)
+			.pathParam("pessoaId", pessoaIdAtualizar)
 	        .body(jsonCorretoPessoa)
 	        .contentType(ContentType.JSON)
 	        .accept(ContentType.JSON)
@@ -95,7 +92,7 @@ class CadastroPessoaIT {
 	@Test
 	public void deveRetornarStatus404_QuandoConsultarPessoaInexistente() {
 	RestAssured.given()
-		.pathParam("pessoaId", PESSOA_ID_INEXISTENTE)
+		.pathParam("pessoaId", pessoaIdInexistente)
 		.accept(ContentType.JSON)
 	.when()
 		.get("/{pessoaId}")

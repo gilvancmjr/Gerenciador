@@ -22,9 +22,11 @@ public class EnderecoService {
 
 	public Endereco criarEndereco(Long pessoaId, Endereco endereco) {
 		Pessoa pessoa = pessoaService.buscarPessoa(pessoaId);
-		identificaEnderecoPrincipalTrueOuFalse(pessoaId, endereco);
 		endereco.setPessoa(pessoa);
-		return enderecoRepository.save(endereco);
+		Endereco enderecoAtual = enderecoRepository.save(endereco);
+		identificaEnderecoPrincipalTrueOuFalse(pessoaId, endereco);
+		return enderecoAtual;
+
 	}
 
 	public List<Endereco> listarEnderecos(Long pessoaId) {
@@ -49,7 +51,8 @@ public class EnderecoService {
 	}
 
 	private void identificaEnderecoPrincipalTrueOuFalse(Long pessoaId, Endereco endereco) {
-		if (endereco.isPrincipal()) {
+
+		if (endereco.isPrincipal() && pessoaId != null) {
 			definirEnderecoPrincipal(pessoaId, endereco.getId());
 		}
 	}
@@ -58,4 +61,5 @@ public class EnderecoService {
 		return enderecoRepository.findById(enderecoId)
 				.orElseThrow(() -> new EnderecoNaoEncontradoException(enderecoId));
 	}
+
 }

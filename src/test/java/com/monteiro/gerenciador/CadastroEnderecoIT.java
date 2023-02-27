@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -18,18 +18,16 @@ import io.restassured.http.ContentType;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CadastroEnderecoIT {
 	
-	
-	
-	@LocalServerPort
-	private int port;
-	
-	String baseApiUrl = "/pessoas";
-	private String jsonCorretoEndereco;
-	private String jsonCorretoEnderecoSemLogradouro;
-	
 	private static final String DADOS_INVALIDOS_PROBLEM_TITLE = "Dados inválidos";
 	private static final String RECURSO_NAO_ENCONTRADO = "Recurso não encontrada";
 	
+	@LocalServerPort
+	private int port;
+	private String jsonCorretoEndereco;
+	private String jsonCorretoEnderecoSemLogradouro;
+	
+	private int enderecoId = 1; 
+	private int enderecoIdInexistente = 100;
 	
 	@BeforeEach
 	public void setUp() {
@@ -55,7 +53,7 @@ public class CadastroEnderecoIT {
 	@Test
 	public void deveRetornarStatus204_QuandoAlterarEndereçoPrincipal() {
 		RestAssured.given()
-			.pathParam("enderecoId", 1)
+			.pathParam("enderecoId", enderecoId)
 			
 			.accept(ContentType.JSON)
 		.when()
@@ -94,7 +92,7 @@ public class CadastroEnderecoIT {
 	@Test
 	public void deveRetornarStatus404_QuandoAlterarEndereçoPrincipalInexistente() {
 		RestAssured.given()
-		.pathParam("enderecoId", 100)
+		.pathParam("enderecoId", enderecoIdInexistente)
 		
 		.accept(ContentType.JSON)
 	.when()
