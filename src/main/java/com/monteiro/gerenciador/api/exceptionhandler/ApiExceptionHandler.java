@@ -27,7 +27,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
-import com.monteiro.gerenciador.domain.exception.EntidadeEmUsoException;
 import com.monteiro.gerenciador.domain.exception.EntidadeNaoEncontradaException;
 import com.monteiro.gerenciador.domain.exception.NegocioException;
 
@@ -157,18 +156,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		HttpStatus status = HttpStatus.NOT_FOUND;
 		ProblemType problemType = ProblemType.RECURSO_NAO_ENCONTRADO;
-		String detail = ex.getMessage();
-
-		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();
-
-		return handleExceptionInternal(ex, problem, new HttpHeaders(), status, request);
-	}
-
-	@ExceptionHandler(EntidadeEmUsoException.class)
-	public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException ex, WebRequest request) {
-
-		HttpStatus status = HttpStatus.CONFLICT;
-		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
 		String detail = ex.getMessage();
 
 		Problem problem = createProblemBuilder(status, problemType, detail).userMessage(detail).build();

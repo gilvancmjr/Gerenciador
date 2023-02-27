@@ -45,17 +45,17 @@ public class PessoaController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaDto);
 	}
 
-	@PutMapping("/{id}")
-	public ResponseEntity<PessoaDto> atualizarPessoa(@PathVariable Long id, @RequestBody @Valid PessoaForm pessoaForm) {
+	@PutMapping("/{pessoaId}")
+	public ResponseEntity<PessoaDto> atualizarPessoa(@PathVariable Long pessoaId, @RequestBody @Valid PessoaForm pessoaForm) {
 		Pessoa pessoa = pessoaFormDisassembler.toDomainObject(pessoaForm);
-		Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(id, pessoa);
+		Pessoa pessoaAtualizada = pessoaService.atualizarPessoa(pessoaId, pessoa);
 		PessoaDto pessoaDto = pessoaAssembler.toModel(pessoaAtualizada);
 		return ResponseEntity.ok(pessoaDto);
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<PessoaDto> buscarPessoa(@PathVariable Long id) {
-		Pessoa pessoa = pessoaService.buscarPessoa(id);
+	@GetMapping("/{pessoaId}")
+	public ResponseEntity<PessoaDto> buscarPessoa(@PathVariable Long pessoaId) {
+		Pessoa pessoa = pessoaService.buscarPessoa(pessoaId);
 		PessoaDto pessoaDto = pessoaAssembler.toModel(pessoa);
 		return ResponseEntity.ok(pessoaDto);
 	}

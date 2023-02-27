@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.monteiro.gerenciador.domain.exception.EnderecoNaoEncontradoException;
 import com.monteiro.gerenciador.domain.exception.PessoaNaoEncontradoException;
 import com.monteiro.gerenciador.domain.model.Endereco;
 import com.monteiro.gerenciador.domain.model.Pessoa;
@@ -32,6 +33,7 @@ public class EnderecoService {
 
 	public void definirEnderecoPrincipal(Long pessoaId, Long enderecoId) {
 		List<Endereco> enderecos = buscarOuFalar(pessoaId);
+		enderecoBuscarOuFalhar(enderecoId);
 		enderecos.forEach(endereco -> {
 			endereco.setPrincipal(endereco.getId().equals(enderecoId));
 			enderecoRepository.save(endereco);
@@ -50,5 +52,10 @@ public class EnderecoService {
 		if (endereco.isPrincipal()) {
 			definirEnderecoPrincipal(pessoaId, endereco.getId());
 		}
+	}
+
+	private Endereco enderecoBuscarOuFalhar(Long enderecoId) {
+		return enderecoRepository.findById(enderecoId)
+				.orElseThrow(() -> new EnderecoNaoEncontradoException(enderecoId));
 	}
 }
